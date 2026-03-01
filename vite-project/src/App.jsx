@@ -30,7 +30,7 @@ function App() {
       </div>
       <div id="tasks">
         <Task desc={"לנקות את הבית"} />
-        <Task desc={"לסיים חפיפה"} />
+        <Task desc={" לסיים חפיפה"} />
       </div>
  
       <p>
