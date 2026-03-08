@@ -1,10 +1,29 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import './App.css'
 import Task from './Task.jsx'
 
 function App() {
-  const [search, setSearch] = useState("")
-  const [task,taskBar] = useState("")
+  const [search, setSearch] = useState("");
+  const [taskList, setTaskList] = useState([]);
+  const [newTask, setNewTask] = useState("");
+
+
+  useEffect(() => {
+
+    fetch(`http://localhost:3000/tasks`)
+      .then((response) => response.json())
+      .then((data) => {
+        setTaskList(data);
+      })
+      .catch((error) => console.error("Error fetching search results:", error));
+
+  });
+
+  const addTask=(event)=> {
+    if (event.keyCode === 13 && newTask != "") {
+        
+    }
+  }
 
   return (
     <div id="page-container">
@@ -24,13 +43,19 @@ function App() {
             
             type="text"
             id="addBar"
-            onChange={(e) => setSearch(e.target.value)}
+            onChange={(e) => setNewTask(e.target.value)}
+            onKeyDown={(e) => addTask(e)}
             placeholder="הוספת משימה"
         />
       </div>
       <div id="tasks">
-        <Task desc={"לנקות את הבית"} />
-        <Task desc={" לסיים חפיפה"} />
+        
+          {taskList.map((task, index) => (
+              <Task
+                desc={task.description}
+              />
+          ))}
+
       </div>
  
       <p>
