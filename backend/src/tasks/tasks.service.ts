@@ -8,19 +8,14 @@ import { UpdateTaskDto } from "./dto/update-task.dto";
 export class TasksService{
     constructor(private readonly tasksRepository : TasksRepository) {}
 
-    async getTaskById(_id : string): Promise<Task | null> {
-        return this.tasksRepository.findOne({_id});
+    async getTaskById(id : string): Promise<Task | null> {
+        return this.tasksRepository.findOne(id);
     }
 
     async getTasks(): Promise<Task[] | null> {
-        return this.tasksRepository.find({});
+        return this.tasksRepository.find();
     }
 
-    async searchTasks(desc : string) : Promise<Task[] | null> {
-        return this.tasksRepository.find({
-            description: new RegExp(desc, 'i') 
-        });
-    }
 
     async createTask(description : string, done : boolean): Promise<Task| null>{
         return this.tasksRepository.create({
@@ -29,11 +24,11 @@ export class TasksService{
         })
     }
 
-    async updateTask(_id : string, taskUpdates : UpdateTaskDto): Promise<Task | null> {
-        return this.tasksRepository.findOneAndUpdate({_id}, taskUpdates);
+    async updateTask(id : string, taskUpdates : UpdateTaskDto): Promise<Task | null> {
+        return this.tasksRepository.findOneAndUpdate(id, taskUpdates);
     }
-    async deleteTask(_id :string) {
-        return this.tasksRepository.delete({_id});
+    async deleteTask(id :string) {
+        return this.tasksRepository.delete(id);
     }
 
 }

@@ -1,27 +1,22 @@
-
 #searchBar {
-  background-image: url('https://cdn1.iconfinder.com/data/icons/hawcons/32/698627-icon-111-search-512.png');
-  background-repeat: no-repeat;
-  background-position: 5% 50%;
+  background-image: url("https://cdn1.iconfinder.com/data/icons/hawcons/32/698627-icon-111-search-512.png");
   background-size: 30px;
-  width: 30%;
-  font-size: 16px;
-  padding: 12px 20px 12px 40px;
-  border: 1px solid blue;
-  margin-bottom: 12px;
 }
 
 #addBar {
-  background-image: url('  https://cdn-icons-png.freepik.com/512/2791/2791484.png');
+  background-image: url("  https://cdn-icons-png.freepik.com/512/2791/2791484.png");
+  background-size: 25px;
+  margin-right: 100px;
+}
+
+.inputs {
   background-repeat: no-repeat;
   background-position: 5% 50%;
-  background-size: 25px;
   width: 30%;
   font-size: 16px;
   padding: 12px 20px 12px 40px;
   border: 1px solid blue;
   margin-bottom: 12px;
-  margin-right: 100px;
 }
 
 #page-container {
@@ -30,22 +25,22 @@
   align-items: center;
 }
 
-#input-sections{
+#input-sections {
   margin-top: 50px;
   margin-bottom: 70px;
 }
-#tasks{
+
+#tasks {
   display: flex;
   flex-direction: column;
   align-items: center;
-  width:100%;
+  width: 100%;
   margin-bottom: 110px;
 }
 
-#title-comp{
+#title-comp {
   display: flex;
-  width:100%;
+  width: 100%;
   justify-content: center;
   border-bottom: 2px solid blue;
-
 }

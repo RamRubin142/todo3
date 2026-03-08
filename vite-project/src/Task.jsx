@@ -1,8 +1,8 @@
 import { useState } from 'react'
 import './Task.css'
 
-function Task({desc}) {
-
+function Task({description, done, _id}) {
+  
 
   return (
 
@@ -11,7 +11,7 @@ function Task({desc}) {
             <input 
                 type="checkbox" 
             />
-            <p>{desc}</p>
+            <p>{description}</p>
 
         </div>
         <div id="buttons">
