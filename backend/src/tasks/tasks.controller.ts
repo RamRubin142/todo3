@@ -28,6 +28,4 @@ export class TasksController {
     async deleteTask(@Param('id') id : string) {
         return this.tasksService.deleteTask(id);
     }
-
-
 }

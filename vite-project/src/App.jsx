@@ -14,10 +14,19 @@ function App() {
     setTaskList(data);
     setFilteredTaskList(data);
   };
+
+  const deleteTask = async (_id) => {
+    const filteredList = taskList.filter((task) =>
+      task._id != _id
+    );
+    const filteredFilteredList = filteredTaskList.filter((task) => task._id != _id);
+
+    setTaskList(filteredList);
+    setFilteredTaskList(filteredFilteredList);
+  };
   useEffect(() => {
     fetchData();
-    
-  },[setTaskList]);
+  }, [setTaskList]);
 
   const addTask = async (event) => {
     const enter = 13;
@@ -25,17 +34,17 @@ function App() {
       const response = await fetch("http://localhost:3000/tasks", {
         method: "POST",
         headers: {
-          "Content-Type": "application/json"
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({ description: newTask, done: false }),
       });
-      fetchData()
-      
-
+      fetchData();
     }
   };
   useEffect(() => {
-    const filtered = taskList.filter(task => task.description.includes(search));
+    const filtered = taskList.filter((task) =>
+      task.description.includes(search)
+    );
     setFilteredTaskList(filtered);
   }, [search]);
 
@@ -63,8 +72,14 @@ function App() {
         />
       </div>
       <div id="tasks">
-        {filteredTaskList.map((task, index) => (
-          <Task description={task.description} />
+        {filteredTaskList.map((task) => (
+          <Task
+            key={task._id}
+            description={task.description}
+            _id={task._id}
+            initialDone={task.done}
+            onDelete = {deleteTask}
+          />
         ))}
       </div>
 
