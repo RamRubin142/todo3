@@ -6,7 +6,7 @@ import { deleteTaskById, updateTaskById } from "./api/tasks.api";
 export const Task = ({ description, id, initialDone, onDelete, onEdit }) => {
   const [done, setDone] = useState(initialDone);
   const [isEditing, setIsEditing] = useState(false);
-  const [editValue, setEditValue] = useState("");
+  const [editValue, setEditValue] = useState(description);
   const [descriptionValue, setDescriptionValue] = useState(description);
 
   const update = async (event) => {
