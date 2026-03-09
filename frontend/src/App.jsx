@@ -1,32 +1,35 @@
 import { useState, useEffect } from "react";
 import "./App.css";
 import { Task } from "./Task.jsx";
+import { getTasks, createTask } from "./api/tasks.api";
 
 export const App = () => {
-  const [search, setSearch] = useState("");
   const [taskList, setTaskList] = useState([]);
   const [filteredTaskList, setFilteredTaskList] = useState([]);
-  const [newTask, setNewTask] = useState("");
+  const [searchVal, setSearchVal] = useState("");
 
   const finishedTasksCount = taskList.filter((task) => task.done).length;
 
   const fetchDataForUpdating = async () => {
-    const response = await fetch(`http://localhost:3000/tasks`);
-    const data = await response.json();
+    const data = await getTasks();
     setTaskList(data);
   };
 
   const fetchData = async () => {
-    const response = await fetch(`http://localhost:3000/tasks`);
-    const data = await response.json();
+    const data = await getTasks();
     setTaskList(data);
     setFilteredTaskList(data);
   };
 
-  const deleteTask = async (_id) => {
-    const filteredList = taskList.filter((task) => task._id != _id);
+  const fetchDataForAdding = async () => {
+    const data = await getTasks();
+    setTaskList(data);
+  };
+
+  const deleteTask = async (id) => {
+    const filteredList = taskList.filter((task) => task._id != id);
     const filteredFilteredList = filteredTaskList.filter(
-      (task) => task._id != _id
+      (task) => task._id != id
     );
 
     setTaskList(filteredList);
@@ -37,25 +40,30 @@ export const App = () => {
     fetchData();
   }, []);
 
-  const addTask = async (event) => {
-    const enter = 13;
-    if (event.keyCode === enter && newTask != "") {
-      const response = await fetch("http://localhost:3000/tasks", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ description: newTask, done: false }),
+  const addTask = async (event, taskDescription) => {
+    const ENTER = 13;
+    if (event.keyCode === ENTER && taskDescription != "") {
+      const response = await createTask({
+        description: taskDescription,
+        done: false,
       });
-      fetchData();
+      fetchDataForAdding();
+
+      if (taskDescription.includes(searchVal)) {
+        setFilteredTaskList([...filteredTaskList, response]);
+      }
     }
   };
-  useEffect(() => {
+
+  const handleSearch = async (searchItem) => {
+    setSearchVal(searchItem);
+
     const filtered = taskList.filter((task) =>
-      task.description.includes(search)
+      task.description.includes(searchItem)
     );
+
     setFilteredTaskList(filtered);
-  }, [search]);
+  };
 
   return (
     <div id="page-container">
@@ -68,15 +76,14 @@ export const App = () => {
           type="text"
           id="searchBar"
           className="inputs"
-          onChange={(event) => setSearch(event.target.value)}
+          onChange={(event) => handleSearch(event.target.value)}
           placeholder="חיפוש משימה"
         />
         <input
           type="text"
           id="addBar"
           className="inputs"
-          onChange={(event) => setNewTask(event.target.value)}
-          onKeyDown={(event) => addTask(event)}
+          onKeyDown={(event) => addTask(event, event.target.value)}
           placeholder="הוספת משימה"
         />
       </div>
@@ -85,7 +92,7 @@ export const App = () => {
           <Task
             key={task._id}
             description={task.description}
-            _id={task._id}
+            id={task._id}
             initialDone={task.done}
             onDelete={deleteTask}
             onEdit={fetchDataForUpdating}

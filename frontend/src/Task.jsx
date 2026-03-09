@@ -1,48 +1,34 @@
 import { useState } from "react";
 import "./Task.css";
 import { useEffect } from "react";
+import { deleteTaskById, updateTaskById } from "./api/tasks.api";
 
-export const Task = ({ description, _id, initialDone, onDelete, onEdit }) => {
-  const [_done, setDone] = useState(false);
+export const Task = ({ description, id, initialDone, onDelete, onEdit }) => {
+  const [done, setDone] = useState(initialDone);
   const [isEditing, setIsEditing] = useState(false);
   const [editValue, setEditValue] = useState("");
-  const [descriptionValue, setDescriptionValue] = useState("");
+  const [descriptionValue, setDescriptionValue] = useState(description);
 
-  const update = async () => {
-    const response = await fetch("http://localhost:3000/tasks/" + _id, {
-      method: "PATCH",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ descriptionValue, done: _done }),
+  const update = async (event) => {
+    setDone(event.target.checked);
+    await updateTaskById(id, {
+      description: descriptionValue,
+      done: event.target.checked,
     });
     onEdit();
   };
-  useEffect(() => {
-    update();
-  }, [_done]);
-
-  useEffect(() => {
-    setDescriptionValue(description);
-    setDone(initialDone);
-  }, []);
 
   const handleDelete = async () => {
-    const response = await fetch("http://localhost:3000/tasks/" + _id, {
-      method: "DELETE",
-    });
-    onDelete(_id);
+    await deleteTaskById(id);
+    onDelete(id);
   };
 
   const editTaskHandler = async (event) => {
-    const enter = 13;
-    if (event.keyCode === enter && editValue != "") {
-      const response = await fetch("http://localhost:3000/tasks/" + _id, {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ description: editValue, done: _done }),
+    const ENTER = 13;
+    if (event.keyCode === ENTER && editValue != "") {
+      await updateTaskById(id, {
+        description: editValue,
+        done: done,
       });
       setDescriptionValue(editValue);
       onEdit();
@@ -55,8 +41,8 @@ export const Task = ({ description, _id, initialDone, onDelete, onEdit }) => {
       <div id="check-desc">
         <input
           type="checkbox"
-          checked={_done}
-          onChange={(event) => setDone(event.target.checked)}
+          checked={done}
+          onChange={(event) => update(event)}
         />
         <div className="tasks-container">
           {isEditing ? (
