@@ -11,6 +11,9 @@
 #check-desc {
   display: flex;
   margin-right: 6px;
+  flex-direction: row;
+  align-items: center;
+  
 }
 
 #buttons {
@@ -62,4 +65,9 @@
 #edit-button:hover {
   background-size: 25px;
   border-color: transparent;
+}
+
+#edit-box {
+  font-size: 16px;
+  border: none;
 }
