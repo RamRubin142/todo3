@@ -7,6 +7,16 @@ function App() {
   const [taskList, setTaskList] = useState([]);
   const [filteredTaskList, setFilteredTaskList] = useState([]);
   const [newTask, setNewTask] = useState("");
+  
+
+  const finishedTasksCount = taskList.filter((task) => task.done).length;
+
+  
+   const fetchDataForUpdating = async () => {
+    const response = await fetch(`http://localhost:3000/tasks`);
+    const data = await response.json();
+    setTaskList(data);
+  };
 
   const fetchData = async () => {
     const response = await fetch(`http://localhost:3000/tasks`);
@@ -16,17 +26,18 @@ function App() {
   };
 
   const deleteTask = async (_id) => {
-    const filteredList = taskList.filter((task) =>
-      task._id != _id
+    const filteredList = taskList.filter((task) => task._id != _id);
+    const filteredFilteredList = filteredTaskList.filter(
+      (task) => task._id != _id
     );
-    const filteredFilteredList = filteredTaskList.filter((task) => task._id != _id);
 
     setTaskList(filteredList);
     setFilteredTaskList(filteredFilteredList);
+    getFinishedCount();
   };
   useEffect(() => {
     fetchData();
-  }, [setTaskList]);
+  }, []);
 
   const addTask = async (event) => {
     const enter = 13;
@@ -78,12 +89,16 @@ function App() {
             description={task.description}
             _id={task._id}
             initialDone={task.done}
-            onDelete = {deleteTask}
+            onDelete={deleteTask}
+            onEdit={fetchDataForUpdating} 
           />
         ))}
       </div>
 
-      <p>הושלמו 1 משימות מתוך 2,נותרו עוד 1 משימות</p>
+      <p>
+        הושלמו {finishedTasksCount} משימות מתוך {taskList.length}, נותרו עוד{" "}
+        {taskList.length - finishedTasksCount} משימות
+      </p>
     </div>
   );
 }
