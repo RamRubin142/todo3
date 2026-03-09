@@ -2,7 +2,7 @@ import { useState } from "react";
 import "./Task.css";
 import { useEffect } from "react";
 
-function Task({ description, _id, initialDone, onDelete, onEdit }) {
+export const Task = ({ description, _id, initialDone, onDelete, onEdit }) => {
   const [_done, setDone] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [editValue, setEditValue] = useState("");
@@ -91,4 +91,3 @@ function Task({ description, _id, initialDone, onDelete, onEdit }) {
   );
 }
 
-export default Task;

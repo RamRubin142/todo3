@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
 import "./App.css";
-import Task from "./Task.jsx";
+import {Task} from "./Task.jsx";
 
-function App() {
+export const App = () => {
   const [search, setSearch] = useState("");
   const [taskList, setTaskList] = useState([]);
   const [filteredTaskList, setFilteredTaskList] = useState([]);
@@ -103,4 +103,3 @@ function App() {
   );
 }
 
-export default App;
