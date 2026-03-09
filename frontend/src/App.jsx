@@ -1,18 +1,16 @@
 import { useState, useEffect } from "react";
 import "./App.css";
-import {Task} from "./Task.jsx";
+import { Task } from "./Task.jsx";
 
 export const App = () => {
   const [search, setSearch] = useState("");
   const [taskList, setTaskList] = useState([]);
   const [filteredTaskList, setFilteredTaskList] = useState([]);
   const [newTask, setNewTask] = useState("");
-  
 
   const finishedTasksCount = taskList.filter((task) => task.done).length;
 
-  
-   const fetchDataForUpdating = async () => {
+  const fetchDataForUpdating = async () => {
     const response = await fetch(`http://localhost:3000/tasks`);
     const data = await response.json();
     setTaskList(data);
@@ -90,7 +88,7 @@ export const App = () => {
             _id={task._id}
             initialDone={task.done}
             onDelete={deleteTask}
-            onEdit={fetchDataForUpdating} 
+            onEdit={fetchDataForUpdating}
           />
         ))}
       </div>
@@ -101,5 +99,4 @@ export const App = () => {
       </p>
     </div>
   );
-}
-
+};

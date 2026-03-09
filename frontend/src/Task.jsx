@@ -6,9 +6,7 @@ export const Task = ({ description, _id, initialDone, onDelete, onEdit }) => {
   const [_done, setDone] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [editValue, setEditValue] = useState("");
-  const [descriptionValue, setDescriptionValue]  = useState("");
-
-
+  const [descriptionValue, setDescriptionValue] = useState("");
 
   const update = async () => {
     const response = await fetch("http://localhost:3000/tasks/" + _id, {
@@ -62,18 +60,15 @@ export const Task = ({ description, _id, initialDone, onDelete, onEdit }) => {
         />
         <div className="tasks-container">
           {isEditing ? (
-           
             <input
-              id = "edit-box"
+              id="edit-box"
               type="text"
               defaultValue={descriptionValue}
               onChange={(event) => setEditValue(event.target.value)}
               onKeyDown={(event) => {
-                
                 editTaskHandler(event);
               }}
             />
-            
           ) : (
             <p>{descriptionValue}</p>
           )}
@@ -89,5 +84,4 @@ export const Task = ({ description, _id, initialDone, onDelete, onEdit }) => {
       </div>
     </div>
   );
-}
-
+};
