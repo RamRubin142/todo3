@@ -5,10 +5,13 @@ import { getTasks, createTask } from "./api/tasks.api";
 
 export const App = () => {
   const [taskList, setTaskList] = useState([]);
-  const [filteredTaskList, setFilteredTaskList] = useState([]);
   const [searchVal, setSearchVal] = useState("");
 
   const finishedTasksCount = taskList.filter((task) => task.done).length;
+  var filteredTaskList = taskList.filter((task) =>
+    task.description.includes(searchVal)
+  );
+  
 
   const fetchDataForUpdating = async () => {
     const data = await getTasks();
@@ -18,52 +21,35 @@ export const App = () => {
   const fetchData = async () => {
     const data = await getTasks();
     setTaskList(data);
-    setFilteredTaskList(data);
-  };
-
-  const fetchDataForAdding = async () => {
-    const data = await getTasks();
-    setTaskList(data);
   };
 
   const deleteTask = async (id) => {
     const filteredList = taskList.filter((task) => task._id != id);
-    const filteredFilteredList = filteredTaskList.filter(
-      (task) => task._id != id
+    filteredTaskList = taskList.filter(
+      (task) => task._id != id &&  filteredTaskList.includes(task)
     );
 
     setTaskList(filteredList);
-    setFilteredTaskList(filteredFilteredList);
-    getFinishedCount();
   };
   useEffect(() => {
     fetchData();
   }, []);
 
   const addTask = async (event, taskDescription) => {
-    const ENTER = 13;
-    if (event.keyCode === ENTER && taskDescription != "") {
+    if (event.key == "Enter" && taskDescription ) {
       const response = await createTask({
         description: taskDescription,
         done: false,
       });
-      fetchDataForAdding();
+      fetchDataForUpdating();
 
       if (taskDescription.includes(searchVal)) {
-        setFilteredTaskList([...filteredTaskList, response]);
+        filteredTaskList = [...filteredTaskList, response];
       }
     }
   };
 
-  const handleSearch = async (searchItem) => {
-    setSearchVal(searchItem);
 
-    const filtered = taskList.filter((task) =>
-      task.description.includes(searchItem)
-    );
-
-    setFilteredTaskList(filtered);
-  };
 
   return (
     <div id="page-container">
@@ -76,7 +62,7 @@ export const App = () => {
           type="text"
           id="searchBar"
           className="inputs"
-          onChange={(event) => handleSearch(event.target.value)}
+          onChange={(event) => setSearchVal(event.target.value)}
           placeholder="חיפוש משימה"
         />
         <input
@@ -93,17 +79,21 @@ export const App = () => {
             key={task._id}
             description={task.description}
             id={task._id}
-            initialDone={task.done}
+            isDone={task.done}
             onDelete={deleteTask}
             onEdit={fetchDataForUpdating}
           />
         ))}
       </div>
+      {(taskList.length > 0) ? (
+              <p>
+          הושלמו {finishedTasksCount} משימות מתוך {taskList.length}, נותרו עוד{" "}
+          {taskList.length - finishedTasksCount} משימות
+        </p>
+      ) : (<p> </p>)
+      }
 
-      <p>
-        הושלמו {finishedTasksCount} משימות מתוך {taskList.length}, נותרו עוד{" "}
-        {taskList.length - finishedTasksCount} משימות
-      </p>
+
     </div>
   );
 };

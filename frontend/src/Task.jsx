@@ -3,10 +3,9 @@ import "./Task.css";
 import { useEffect } from "react";
 import { deleteTaskById, updateTaskById } from "./api/tasks.api";
 
-export const Task = ({ description, id, initialDone, onDelete, onEdit }) => {
-  const [done, setDone] = useState(initialDone);
+export const Task = ({ description, id, isDone, onDelete, onEdit }) => {
+  const [done, setDone] = useState(isDone);
   const [isEditing, setIsEditing] = useState(false);
-  const [editValue, setEditValue] = useState(description);
   const [descriptionValue, setDescriptionValue] = useState(description);
 
   const update = async (event) => {
@@ -25,12 +24,11 @@ export const Task = ({ description, id, initialDone, onDelete, onEdit }) => {
 
   const editTaskHandler = async (event) => {
     const ENTER = 13;
-    if (event.keyCode === ENTER && editValue != "") {
+    if (event.keyCode === ENTER && descriptionValue ) {
       await updateTaskById(id, {
-        description: editValue,
+        description: descriptionValue,
         done: done,
       });
-      setDescriptionValue(editValue);
       onEdit();
       setIsEditing(false);
     }
@@ -50,7 +48,7 @@ export const Task = ({ description, id, initialDone, onDelete, onEdit }) => {
               id="edit-box"
               type="text"
               defaultValue={descriptionValue}
-              onChange={(event) => setEditValue(event.target.value)}
+              onChange={(event) => setDescriptionValue(event.target.value)}
               onKeyDown={(event) => {
                 editTaskHandler(event);
               }}
